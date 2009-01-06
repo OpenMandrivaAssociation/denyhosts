@@ -1,6 +1,6 @@
 Name:       denyhosts
 Version:    2.6
-Release:    %mkrel 1
+Release:    %mkrel 2
 Summary:    A script to help thwart ssh server attacks
 
 Group:      Networking/Other
