@@ -15,7 +15,7 @@ Source5:    denyhosts.logrotate
 Source6:    README.fedora
 Patch0:     denyhosts-2.6-config.patch
 Patch1:     denyhosts-2.4-setup.patch
-Patch2:     denyhosts-2.2-daemon-control.patch
+Patch2:     denyhosts-2.6-daemon-control.patch
 # Patch10 is a security fix
 Patch10:    denyhosts-2.6-regex.patch
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root
