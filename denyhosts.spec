@@ -91,12 +91,6 @@ for i in allowed-warned-hosts hosts hosts-restricted hosts-root \
   touch %{buildroot}/%{_localstatedir}/lib/denyhosts/$i
 done
 
-# FC-4 and earlier won't create these automatically; create them here
-# so that the %exclude below doesn't fail
-touch %{buildroot}/%{_bindir}/denyhosts.pyc
-touch %{buildroot}/%{_bindir}/denyhosts.pyo
-
-
 %clean
 rm -rf %{buildroot}
 
@@ -134,8 +128,6 @@ fi
 %doc README.fedora README.txt setup.py README.contrib
 
 %{_bindir}/denyhosts.py
-%exclude %{_bindir}/denyhosts.py[co]
-
 %{_bindir}/denyhosts-control
 %{_datadir}/denyhosts
 %{py_puresitedir}/*
