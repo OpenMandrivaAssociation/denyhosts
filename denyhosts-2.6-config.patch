@@ -1,0 +1,62 @@
+--- denyhosts.cfg-dist.orig	2006-08-20 16:09:57.000000000 +0200
++++ denyhosts.cfg-dist	2008-11-08 22:09:53.000000000 +0100
+@@ -9,10 +9,10 @@
+ # argument
+ #
+ # Redhat or Fedora Core:
+-SECURE_LOG = /var/log/secure
++#SECURE_LOG = /var/log/secure
+ #
+ # Mandrake, FreeBSD or OpenBSD: 
+-#SECURE_LOG = /var/log/auth.log
++SECURE_LOG = /var/log/auth.log
+ #
+ # SuSE:
+ #SECURE_LOG = /var/log/messages
+@@ -55,13 +55,18 @@
+ #            'y' = years
+ #
+ # never purge:
+-PURGE_DENY = 
++#PURGE_DENY = 
+ #
+ # purge entries older than 1 week
+ #PURGE_DENY = 1w
+ #
+ # purge entries older than 5 days
+ #PURGE_DENY = 5d
++#
++# For the default Fedora Extras install, we want timestamping but no
++# expiration (at least by default) so this is deliberately set high.
++# Adjust to taste.
++PURGE_DENY = 4w
+ #######################################################################
+ 
+ #######################################################################
+@@ -150,7 +155,7 @@
+ # Note: it is recommended that you use an absolute pathname
+ # for this value (eg. /home/foo/denyhosts/data)
+ #
+-WORK_DIR = /usr/share/denyhosts/data
++WORK_DIR = /var/lib/denyhosts
+ #
+ #######################################################################
+ 
+@@ -216,7 +221,7 @@
+ # Multiple email addresses can be delimited by a comma, eg:
+ # ADMIN_EMAIL = foo@bar.com, bar@foo.com, etc@foobar.com
+ #
+-ADMIN_EMAIL = 
++ADMIN_EMAIL = root
+ #
+ #######################################################################
+ 
+@@ -255,7 +260,7 @@
+ #
+ # SMTP_SUBJECT: you can specify the "Subject:" of messages sent
+ # by DenyHosts when it reports thwarted abuse attempts
+-SMTP_SUBJECT = DenyHosts Report
++SMTP_SUBJECT = DenyHosts Report from $[HOSTNAME]
+ #
+ ######################################################################
+ 

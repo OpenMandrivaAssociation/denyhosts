@@ -1,0 +1,7 @@
+DenyHosts-2.6.tar.gz
+denyhosts-allowed-hosts
+denyhosts.cron
+denyhosts.init
+denyhosts.logrotate
+denyhosts.sysconfig
+README.fedora

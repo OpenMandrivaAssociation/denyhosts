@@ -1,0 +1,8 @@
+sources:
+  "DenyHosts-2.6.tar.gz:"	02143843cb7c37c986c222b7acc11f7b75eb7373
+  "denyhosts-allowed-hosts:"	5e613a8ab116827cb43f40335f40dd3a33f6b8bd
+  "denyhosts.cron:"	67dc351774120e142a6b37cfec1ecf57c9d0bf57
+  "denyhosts.init:"	99f465048e32fc3fb400477b989e69693a1587cc
+  "denyhosts.logrotate:"	11054b9bb7734c774f2e05216cd939d7e0ed49b8
+  "denyhosts.sysconfig:"	dcc4d551600f7947086116f29e70bc1bc250fcd1
+  "README.fedora:"	36dabc9d60cf6ffec4284a01a0d2b2cd8c28b0d5
