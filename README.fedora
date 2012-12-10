@@ -1,0 +1,46 @@
+Some useful information about DenyHosts as packaged by Fedora Extras
+--------------------------------------------------------------------
+
+It installs and runs as a service, so you can start it with:
+
+  service denyhosts start
+
+and enable it at boot time with:
+
+  chkconfig denyhosts on
+
+
+By default denyhosts runs continuously waking up to process your logs
+every thirty seconds.  However, you can choose to have it run
+periodically via cron.  To do so, edit /etc/sysconfig/denyhosts and
+change the "DAEMON=yes" line to "DAEMON=no".  Then edit
+/etc/cron.d/denyhosts, uncomment the appropriate lines and adjust the
+interval at which it runs to your choosing.  You can see a description
+of the file format by running:
+
+  man 5 crontab
+
+
+By default, DenyHosts is set up to purge old block entries, but only
+after four weeks.  If you wish to adjust this, edit /etc/denyhosts.conf
+and look for "PURGE_DENY".
+
+DenyHosts will process only your current logfile (/var/log/secure).
+If you want to incorporate an old logfile (in this example,
+/var/log/secure.1) , you can run
+
+  denyhosts.py -c /etc/denyhosts.conf /var/log/secure.1
+
+DenyHosts can also handle logs compressed with gzip or bzip2.
+
+
+Notes about upgrading
+---------------------
+If upgrading from DenyHosts 0.6.0 or earlier, note that this package
+does not run denyhosts --migrate to make the old entries expirable.
+This preserves any entries that may have been manually added.  You
+can, of course, run this yourself.
+
+This package runs denyhosts --upgrade099 automatically to move any
+post-0.6.0 and pre-0.9.9 entries into the proper format.
+

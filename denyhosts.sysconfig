@@ -1,0 +1,4 @@
+# Should DenyHosts run in daemon mode?
+# If not set to "yes", you also need to edit /etc/cron.d/denyhosts
+# and uncomment the appropriate lines.
+DAEMON=yes

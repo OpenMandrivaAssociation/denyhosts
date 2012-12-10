@@ -156,3 +156,21 @@ fi
 %{_initrddir}/denyhosts
 
 
+
+
+%changelog
+* Fri Nov 12 2010 Bogdano Arendartchuk <bogdano@mandriva.com> 2.6-2mdv2011.0
++ Revision: 596962
+- removed unnecessary protection for .py[co] files
+
+* Tue Jan 06 2009 Funda Wang <fwang@mandriva.org> 2.6-2mdv2009.1
++ Revision: 325275
+- rediff daemon control patch
+
+* Sat Nov 08 2008 Gaëtan Lehmann <glehmann@mandriva.org> 2.6-1mdv2009.1
++ Revision: 301169
+- import denyhosts
+
+
+* Sat Nov 8 2008 Gatan Lehmann <glehmann@mandriva.org> 2.6-1mdv2009.0
+- import package from fedora

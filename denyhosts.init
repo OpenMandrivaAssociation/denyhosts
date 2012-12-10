@@ -1,0 +1,168 @@
+#!/bin/bash
+#
+# denyhosts     This shell script starts the denyhosts daemon OR enables the
+#               denyhosts cron job depending upon whether DAEMON = yes in 
+#               /etc/sysconfig/denyhosts
+#
+# Author:       Seth Vidal <skvidal@phy.duke.edu> (original script)
+#		Jason Tibbitts <tibbs@math.uh.edu> (denyhost changes)
+#
+# chkconfig:	345 50 01
+#
+# description:  Enable execution of denyhosts, an SSH log watcher
+# processname	denyhosts
+# config:	/etc/denyhosts.cfg
+#
+### BEGIN INIT INFO
+# Provides:          denyhosts
+# Required-Start:    $syslog
+# Short-Description: Enable execution of denyhosts, an SSH log watcher
+# Description:       DenyHosts is a Python script that analyzes the sshd server
+#                    log messages to determine which hosts are attempting to
+#                    hack into your system. It also determines what user
+#                    accounts are being targeted. It keeps track of the
+#                    frequency of attempts from each host and, upon discovering
+#                    a repeated attack host, updates the /etc/hosts.deny file
+#                    to prevent future break-in attempts from that host.  Email
+#                    reports can be sent to a system admin.
+### END INIT INFO
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+# Make sure HOSTNAME is in the environment so denyhosts can
+# use it in report subjects
+HOSTNAME=$(hostname)
+export HOSTNAME
+
+CRONLOCK=/var/lock/subsys/denyhosts.init
+LOCKFILE=/var/lock/subsys/denyhosts
+
+DHOSTS=/usr/bin/denyhosts.py
+DOPTS="--daemon --config=/etc/denyhosts.conf"
+
+RETVAL=0
+
+# Determine whether or not denyhosts is to be run as a daemon or periodically
+# by cron
+[ -f /etc/sysconfig/denyhosts ] && . /etc/sysconfig/denyhosts
+
+
+# cron service functions
+c_start() {
+    echo -n $"Enabling denyhosts cron service: "
+    touch "$CRONLOCK" && success || failure
+    RETVAL=$?
+    echo
+}
+
+c_stop() {
+    echo -n $"Disabling denyhosts cron service: "
+    rm -f "$CRONLOCK" && success || failure
+    RETVAL=$?
+    echo
+}
+
+c_restart() {
+    c_stop
+    c_start
+}
+
+c_condrestart() {
+    [ -f "$CRONLOCK" ] && c_restart
+}
+
+c_status() {
+    if [ -f $CRONLOCK ]; then
+	echo $"denyhosts cron service is enabled."
+	RETVAL=0
+    else
+	echo $"denyhosts cron service is disabled."
+	RETVAL=3
+    fi
+}
+
+# daemon service functions
+d_start() { 
+    echo -n $"Starting denyhosts: "
+    daemon $DHOSTS $DOPTS 
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && touch $LOCKFILE
+}
+
+d_stop() {
+    echo -n $"Stopping denyhosts: "
+
+    # Some magic here since older versions stored the PID in the lockfile
+    # instead of using a separate PID file
+    # So if the lockfile has nonzero length, we use it as the PID file
+    if [ -n $LOCKFILE ]; then
+        killproc -p $LOCKFILE $DHOSTS
+        RETVAL=$?
+    else
+        killproc $DHOSTS
+        RETVAL=$?
+    fi
+    echo
+    [ $RETVAL -eq 0 ] && rm -f $LOCKFILE
+}
+
+d_restart() {
+    d_stop
+    d_start
+}
+
+d_condrestart() {
+    [ -f $LOCKFILE ] && d_restart
+}
+
+d_status() {
+    status $DHOSTS
+    RETVAL=$?
+}
+
+case "$1" in
+    start)
+	if [ $DAEMON = "yes" ]; then 
+	    d_start;       
+	else 
+	    c_start;   
+	fi 
+	;;
+    stop) 
+	if [ $DAEMON = "yes" ]; then 
+	    d_stop;        
+	else 
+	    c_stop;    
+	fi 
+	;;
+    restart|force-reload)
+	if [ $DAEMON = "yes" ]; then 
+	    d_restart;     
+	else 
+	    c_restart; 
+	fi 
+	;;
+    reload)
+	;;
+    condrestart)
+	if [ $DAEMON = "yes" ]; then 
+	    d_condrestart; 
+	else 
+	    c_restart; 
+	fi 
+	;;
+    status)
+	if [ $DAEMON = "yes" ]; then 
+	    d_status;      
+	else 
+	    c_status;  
+	fi 
+	;;
+    *)
+	echo $"Usage: $0 {start|stop|status|restart|reload|force-reload|condrestart}"
+	exit 1
+esac
+
+exit $RETVAL
