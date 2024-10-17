@@ -5,7 +5,7 @@ Summary:    A script to help thwart ssh server attacks
 
 Group:      Networking/Other
 License:    GPLv2
-URL:        http://denyhosts.sourceforge.net/
+URL:        https://denyhosts.sourceforge.net/
 Source0:    http://dl.sourceforge.net/denyhosts/DenyHosts-%{version}.tar.gz
 Source1:    denyhosts.cron
 Source2:    denyhosts.init
